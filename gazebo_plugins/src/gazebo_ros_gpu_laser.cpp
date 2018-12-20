@@ -95,7 +95,7 @@ void GazeboRosLaser::Load(sensors::SensorPtr _parent, sdf::ElementPtr _sdf)
 
   if (!this->sdf->HasElement("topicName"))
   {
-    ROS_INFO_NAMED("gpu_laser", "GazeboRosLaser plugin missing <topicName>, defaults to /<world name>/<model name>/<link name>/<sensor name>");
+    ROS_INFO_NAMED("gpu_laser", "GazeboRosLaser plugin missing <topicName>, defaults to /<parent name>/laser");
     this->topic_name_ = _parent->ParentName() + "/laser";
   }
   else
