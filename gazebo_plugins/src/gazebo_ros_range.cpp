@@ -38,6 +38,7 @@
 #include "gazebo_plugins/gazebo_ros_utils.h"
 
 #include <algorithm>
+#include <boost/algorithm/string/replace.hpp>
 #include <string>
 #include <assert.h>
 
@@ -114,11 +115,12 @@ void GazeboRosRange::Load(sensors::SensorPtr _parent, sdf::ElementPtr _sdf)
 
   if (!this->sdf->HasElement("topicName"))
   {
-    ROS_INFO_NAMED("range", "Range plugin missing <topicName>, defaults to /range");
-    this->topic_name_ = "/range";
+    ROS_INFO_NAMED("range", "Range plugin missing <topicName>, defaults to /<world name>/<model name>/<link name>/<sensor name>");
+    this->topic_name_ = _parent->ParentName() + "/range";
   }
   else
-    this->topic_name_ = this->sdf->Get<std::string>("topicName");
+    this->topic_name_ = _parent->ParentName() + "/" + this->sdf->Get<std::string>("topicName");
+  boost::replace_all(this->topic_name_, "::", "/");
 
   if (!this->sdf->HasElement("radiation"))
   {
